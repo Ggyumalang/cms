@@ -1,20 +1,16 @@
 package com.zerobase.user.client;
 
-import feign.auth.BasicAuthRequestInterceptor;
+import com.zerobase.user.client.mailgun.SendMailForm;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "mailgun" , url = "https://api.malgun.net/v3/")
+@FeignClient(name = "mailgun", url = "https://api.mailgun.net/v3/")
 @Qualifier("mailgun")
-public class MailgunClient {
+public interface MailgunClient {
 
-    @Value(value = "${mailgun.key}")
-    private String mailgunKey;
-
-    @PostMapping
-    public BasicAuthRequestInterceptor basicAuthRequestInterceptor(){
-
-    }
+    @PostMapping("sandbox71fae8fa49e044b1bab18f8de2e4bd73.mailgun.org/messages")
+    ResponseEntity<String> sendEmail(@SpringQueryMap SendMailForm form);
 }

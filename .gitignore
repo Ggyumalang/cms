@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### Mailgun ###
-user-api/**/**/**/resources/application-mailgun.yml
+user-api/**/resources/application-mailgun.yml
