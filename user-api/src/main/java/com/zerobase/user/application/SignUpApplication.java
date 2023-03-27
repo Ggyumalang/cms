@@ -52,6 +52,7 @@ public class SignUpApplication {
                 .append("http://localhost:8081/signup/verify/customer?email=")
                 .append(email)
                 .append("&code=")
-                .append(code).toString();
+                .append(code)
+                .toString();
     }
 }

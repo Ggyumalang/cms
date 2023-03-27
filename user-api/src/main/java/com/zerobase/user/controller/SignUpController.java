@@ -14,12 +14,12 @@ public class SignUpController {
     private final SignUpApplication signUpApplication;
 
     @PostMapping
-    public ResponseEntity<String> customerSignUp(@RequestBody SignUpForm form){
+    public ResponseEntity<String> customerSignUp(@RequestBody SignUpForm form) {
         return ResponseEntity.ok(signUpApplication.customerSignUp(form));
     }
 
-    @PutMapping("/verify/customer")
-    public ResponseEntity<String> verifyCustomer(String email, String code){
+    @GetMapping("/verify/customer")
+    public ResponseEntity<String> verifyCustomer(String email, String code) {
         signUpApplication.customerVerify(email, code);
         return ResponseEntity.ok("인증이 완료되었습니다.");
     }
