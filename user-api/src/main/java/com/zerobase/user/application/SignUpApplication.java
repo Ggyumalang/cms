@@ -1,18 +1,17 @@
 package com.zerobase.user.application;
 
 import com.zerobase.user.client.MailgunClient;
+import com.zerobase.user.domain.model.Seller;
+import com.zerobase.user.exception.CustomException;
+import com.zerobase.user.exception.ErrorCode;
+import com.zerobase.user.service.customer.SignUpCustomerService;
+import com.zerobase.user.service.seller.SignUpSellerService;
 import com.zerobase.user.client.mailgun.SendMailForm;
 import com.zerobase.user.domain.SignUpForm;
 import com.zerobase.user.domain.model.Customer;
-import com.zerobase.user.domain.model.Seller;
-import com.zerobase.user.exception.CustomException;
-import com.zerobase.user.service.customer.SignUpCustomerService;
-import com.zerobase.user.service.seller.SignUpSellerService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
-
-import static com.zerobase.user.exception.ErrorCode.ALREADY_REGISTERED_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class SignUpApplication {
 
     public String customerSignUp(SignUpForm form) {
         if (signUpCustomerService.isEmailExist(form.getEmail())) {
-            throw new CustomException(ALREADY_REGISTERED_USER);
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_USER);
         } else {
             Customer customer = signUpCustomerService.signUp(form);
             String code = getRandomCode();
@@ -47,7 +46,7 @@ public class SignUpApplication {
 
     public String sellerSignUp(SignUpForm form) {
         if (signUpSellerService.isEmailExist(form.getEmail())) {
-            throw new CustomException(ALREADY_REGISTERED_USER);
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_USER);
         } else {
             Seller seller = signUpSellerService.signUp(form);
             String code = getRandomCode();
