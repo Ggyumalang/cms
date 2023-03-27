@@ -38,11 +38,11 @@ public class SignUpCustomerService {
             throw new CustomException(ALREADY_VERIFIED_USER);
         }
 
-        if(code.equals(customer.getVerificationCode())){
+        if(!code.equals(customer.getVerificationCode())){
             throw new CustomException(WRONG_VERIFICATION_CODE);
         }
 
-        if(customer.getVerifyExpiredAt().isBefore(LocalDateTime.now())){
+        if(LocalDateTime.now().isAfter(customer.getVerifyExpiredAt())){
             throw new CustomException(EXPIRED_VERIFICATION);
         }
 
