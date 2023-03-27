@@ -1,4 +1,4 @@
-package com.zerobase.user.repository;
+package com.zerobase.user.domain.repository;
 
 import com.zerobase.user.domain.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
