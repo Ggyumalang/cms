@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.zerobase.user.exception.ErrorCode.NOT_FOUND_USER;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/seller")
 @RequiredArgsConstructor
 public class SellerController {
 
