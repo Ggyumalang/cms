@@ -1,7 +1,7 @@
 package com.zerobase.user.service.customer;
 
-import com.zerobase.user.domain.model.Customer;
 import com.zerobase.user.domain.repository.CustomerRepository;
+import com.zerobase.user.domain.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
