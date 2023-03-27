@@ -39,7 +39,7 @@ public class CustomerController {
             @RequestHeader(name = "Authorization") String token,
             @RequestBody ChangeBalanceForm form
     ){
-        UserVo vo = provider.getUserVo(token);
+        UserVo vo = provider.getUserVo(token.substring(TOKEN_PREFIX.length()));
         return ResponseEntity.ok(customerBalanceService.changeBalance(vo.getId(), form).getCurrentMoney());
     }
 }
