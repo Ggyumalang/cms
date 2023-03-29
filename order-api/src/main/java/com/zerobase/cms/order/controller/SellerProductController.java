@@ -66,4 +66,30 @@ public class SellerProductController {
                                 token.substring(TOKEN_PREFIX.length())
                         ).getId(), form)));
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteProduct(
+            @RequestHeader(name = "Authorization") String token,
+            @RequestParam Long productId
+    ) {
+        productService.deleteProduct(
+                provider.getUserVo(token.substring(TOKEN_PREFIX.length())).getId()
+                , productId
+        );
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/item")
+    public ResponseEntity<Void> deleteProductItem(
+            @RequestHeader(name = "Authorization") String token,
+            @RequestParam Long productItemId
+    ) {
+        productItemService.deleteProductItem(
+                provider.getUserVo(token.substring(TOKEN_PREFIX.length())).getId()
+                , productItemId
+        );
+
+        return ResponseEntity.ok().build();
+    }
 }
