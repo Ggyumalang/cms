@@ -2,15 +2,14 @@ package com.zerobase.cms.order.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 @Getter
 public enum ErrorCode {
 
-    //login
-    LOGIN_CHECK_FAIL(HttpStatus.BAD_REQUEST, "아이디나 패스워드를 확인해주세요.");
+    SAME_ITEM_NAME("아이템 명 중복입니다."),
 
-    private final HttpStatus httpStatus;
+    NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다.");
+
     private final String detail;
 }

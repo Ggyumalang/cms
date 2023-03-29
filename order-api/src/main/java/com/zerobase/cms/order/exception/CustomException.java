@@ -1,17 +1,15 @@
 package com.zerobase.cms.order.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;
-    private final int status;
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private final String errorMessage;
 
-    public CustomException(ErrorCode errorCode, int status) {
-        super(errorCode.getDetail());
+    public CustomException(ErrorCode errorCode) {
         this.errorCode = errorCode;
-        this.status = errorCode.getHttpStatus().value();
+        this.errorMessage = errorCode.getDetail();
     }
+
 }
