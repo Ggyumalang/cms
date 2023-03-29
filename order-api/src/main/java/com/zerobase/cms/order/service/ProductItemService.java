@@ -3,6 +3,7 @@ package com.zerobase.cms.order.service;
 import com.zerobase.cms.order.domain.model.Product;
 import com.zerobase.cms.order.domain.model.ProductItem;
 import com.zerobase.cms.order.domain.product.AddProductItemForm;
+import com.zerobase.cms.order.domain.product.UpdateProductItemForm;
 import com.zerobase.cms.order.domain.repository.ProductItemRepository;
 import com.zerobase.cms.order.domain.repository.ProductRepository;
 import com.zerobase.cms.order.exception.CustomException;
@@ -10,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.zerobase.cms.order.exception.ErrorCode.NOT_FOUND_PRODUCT;
-import static com.zerobase.cms.order.exception.ErrorCode.SAME_ITEM_NAME;
+import static com.zerobase.cms.order.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Service
@@ -24,9 +24,9 @@ public class ProductItemService {
         Product product = productRepository.findBySellerIdAndId(sellerId, form.getProductId())
                 .orElseThrow(() -> new CustomException(NOT_FOUND_PRODUCT));
 
-        if(product.getProductItems()
+        if (product.getProductItems()
                 .stream()
-                .anyMatch(item -> item.getName().equals(form.getName()))){
+                .anyMatch(item -> item.getName().equals(form.getName()))) {
             throw new CustomException(SAME_ITEM_NAME);
         }
 
@@ -34,5 +34,18 @@ public class ProductItemService {
         product.getProductItems().add(productItem);
 
         return product;
+    }
+
+    @Transactional
+    public ProductItem updateProductItem(Long sellerId, UpdateProductItemForm form) {
+        ProductItem productItem = productItemRepository.findById(form.getProductItemId())
+                .filter(pi -> pi.getSellerId().equals(sellerId))
+                .orElseThrow(() -> new CustomException(NOT_FOUND_PRODUCT_ITEM));
+
+        productItem.setName(form.getName());
+        productItem.setCount(form.getCount());
+        productItem.setPrice(form.getPrice());
+
+        return productItem;
     }
 }
