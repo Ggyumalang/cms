@@ -1,12 +1,13 @@
 package com.zerobase.user.controller;
 
+import com.zerobase.domain.config.JwtAuthenticationProvider;
+import com.zerobase.domain.domain.common.UserVo;
+import com.zerobase.user.domain.jwt.Token;
 import com.zerobase.user.domain.model.Seller;
 import com.zerobase.user.domain.seller.SellerDto;
 import com.zerobase.user.exception.CustomException;
 import com.zerobase.user.exception.ErrorCode;
 import com.zerobase.user.service.seller.SellerService;
-import com.zerobase.domain.config.JwtAuthenticationProvider;
-import com.zerobase.domain.domain.common.UserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,12 @@ public class SellerController {
 
     private final JwtAuthenticationProvider provider;
     private final SellerService sellerService;
-    private final String TOKEN_PREFIX = "Bearer ";
 
     @GetMapping("/getInfo")
     public ResponseEntity<SellerDto> getInfo(
-            @RequestHeader(name = "Authorization") String token
+            @RequestHeader(name = Token.AUTHORIZATION) String token
     ) {
-        UserVo userVo = provider.getUserVo(token.substring(TOKEN_PREFIX.length()));
+        UserVo userVo = provider.getUserVo(token.substring(Token.PREFIX.length()));
         Seller seller = sellerService.findByIdAndEmail(userVo.getId(), userVo.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         return ResponseEntity.ok(SellerDto.from(seller));
