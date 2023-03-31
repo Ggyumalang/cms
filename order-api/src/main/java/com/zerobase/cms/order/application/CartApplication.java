@@ -38,6 +38,11 @@ public class CartApplication {
         return cartService.addCart(customerId, form);
     }
 
+    public Cart updateCart(Long customerId, Cart cart) {
+        cartService.putCart(customerId, cart);
+        return getCart(customerId);
+    }
+
     //1. 장바구니에 상품을 추가했다.
     //2. 상품의 가격이나 수량이 변동 될 수 있다.
     public Cart getCart(Long customerId) {
@@ -128,7 +133,8 @@ public class CartApplication {
                 cart.addMessage(cartProduct.getName() + " 상품의 옵션이 모두 없어져 구매가 불가능합니다.");
             } else if (tmpMessages.size() > 0) {
                 StringBuilder builder = new StringBuilder();
-                builder.append(cartProduct.getName() + " 상품의 변동 사항 : ");
+                builder.append(cartProduct.getName())
+                        .append(" 상품의 변동 사항 : ");
 
                 for (String message : tmpMessages) {
                     builder.append(message);
