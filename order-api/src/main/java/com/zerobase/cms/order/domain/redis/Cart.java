@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @RedisHash("cart")
 public class Cart {
     @Id
@@ -21,6 +22,10 @@ public class Cart {
 
     private List<Product> products = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
+
+    public Cart(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public void addMessage(String message) {
         messages.add(message);
@@ -35,6 +40,7 @@ public class Cart {
         private Long sellerId;
         private String name;
         private String description;
+        @Builder.Default
         private List<ProductItem> items = new ArrayList<>();
 
         public static Product from(AddProductCartForm form){
@@ -68,5 +74,9 @@ public class Cart {
                     .price(productItem.getPrice())
                     .build();
         }
+    }
+
+    public Cart clone() {
+        return new Cart(customerId,products,messages);
     }
 }

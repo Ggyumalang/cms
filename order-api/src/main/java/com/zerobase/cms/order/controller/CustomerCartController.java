@@ -28,4 +28,12 @@ public class CustomerCartController {
                 , form)
         );
     }
+
+    @GetMapping
+    public ResponseEntity<Cart> showCart(
+            @RequestHeader(name = Token.AUTHORIZATION) String token
+    ) {
+        return ResponseEntity.ok(cartApplication.getCart(provider.getUserVo(
+                token.substring(Token.PREFIX.length())).getId()));
+    }
 }
