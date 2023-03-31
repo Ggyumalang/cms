@@ -1,4 +1,4 @@
-package com.zerobase.user.domain.customer;
+package com.zerobase.cms.order.client.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

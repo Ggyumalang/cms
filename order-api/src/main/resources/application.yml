@@ -6,15 +6,15 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:43306/cmsorder?serverTimezone=UTC&characterEncoding=UTF-8
     driver: org.mariadb.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/order?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://localhost:3306/order?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
     username: cmsorderuser
     password: cms
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
   redis:
     host: localhost
@@ -29,6 +29,10 @@ server:
 feign:
   okhttp:
     enabled: true
+  client:
+    url:
+      user-api: localhost:8081
+
 
 jwt:
   secret: secretKey
