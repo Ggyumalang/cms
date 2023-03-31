@@ -36,4 +36,13 @@ public class CustomerCartController {
         return ResponseEntity.ok(cartApplication.getCart(provider.getUserVo(
                 token.substring(Token.PREFIX.length())).getId()));
     }
+
+    @PutMapping
+    public ResponseEntity<Cart> updateCart(
+            @RequestHeader(name = Token.AUTHORIZATION) String token
+            , @RequestBody Cart cart
+    ) {
+        return ResponseEntity.ok(cartApplication.updateCart(provider.getUserVo(
+                token.substring(Token.PREFIX.length())).getId(), cart));
+    }
 }
