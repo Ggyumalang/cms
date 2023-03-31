@@ -1,22 +1,23 @@
 package com.zerobase.cms.order.domain.redis;
 
 import com.zerobase.cms.order.domain.product.AddProductCartForm;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @RedisHash("cart")
 public class Cart {
+
     @Id
     private Long customerId;
 
@@ -36,6 +37,7 @@ public class Cart {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Product {
+
         private Long id;
         private Long sellerId;
         private String name;
@@ -43,16 +45,16 @@ public class Cart {
         @Builder.Default
         private List<ProductItem> items = new ArrayList<>();
 
-        public static Product from(AddProductCartForm form){
+        public static Product from(AddProductCartForm form) {
             return Product.builder()
-                    .id(form.getProductId())
-                    .sellerId(form.getSellerId())
-                    .name(form.getName())
-                    .description(form.getDescription())
-                    .items(form.getItems().stream()
-                            .map(ProductItem::from)
-                            .collect(Collectors.toList()))
-                    .build();
+                .id(form.getProductId())
+                .sellerId(form.getSellerId())
+                .name(form.getName())
+                .description(form.getDescription())
+                .items(form.getItems().stream()
+                    .map(ProductItem::from)
+                    .collect(Collectors.toList()))
+                .build();
         }
     }
 
@@ -60,23 +62,25 @@ public class Cart {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProductItem{
+    public static class ProductItem {
+
         private Long id;
         private String name;
         private Long count;
         private Long price;
 
-        public static ProductItem from(AddProductCartForm.ProductItem productItem){
+        public static ProductItem from(
+            AddProductCartForm.ProductItem productItem) {
             return ProductItem.builder()
-                    .id(productItem.getProductItemId())
-                    .name(productItem.getName())
-                    .count(productItem.getCount())
-                    .price(productItem.getPrice())
-                    .build();
+                .id(productItem.getProductItemId())
+                .name(productItem.getName())
+                .count(productItem.getCount())
+                .price(productItem.getPrice())
+                .build();
         }
     }
 
     public Cart clone() {
-        return new Cart(customerId,products,messages);
+        return new Cart(customerId, products, messages);
     }
 }

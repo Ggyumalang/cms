@@ -25,7 +25,9 @@ public class OrderApplication {
     private final ProductItemService productItemService;
 
     /**
-     * 1번 : 물건들이 전부 주문 가능한 상태인 지 확인 2번 : 가격 변동이 있었는 지에 대해 확인 3번 : 고객의 돈이 충분한 지
+     * 1번 : 물건들이 전부 주문 가능한 상태인 지 확인
+     * 2번 : 가격 변동이 있었는 지에 대해 확인
+     * 3번 : 고객의 돈이 충분한 지
      * 4번 : 결제 & 상품의 재고 관리
      *
      * @param token

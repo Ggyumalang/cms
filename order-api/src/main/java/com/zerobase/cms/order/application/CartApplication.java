@@ -82,7 +82,7 @@ public class CartApplication {
      * @param cart
      * @return cart
      */
-    protected Cart refreshCart(Cart cart) {
+    public Cart refreshCart(Cart cart) {
 
         if (Objects.isNull(cart.getCustomerId())) {
             return null;
