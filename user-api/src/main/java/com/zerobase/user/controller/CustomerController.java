@@ -5,15 +5,17 @@ import com.zerobase.domain.domain.common.UserVo;
 import com.zerobase.user.domain.customer.ChangeBalanceForm;
 import com.zerobase.user.domain.customer.CustomerDto;
 import com.zerobase.user.domain.jwt.Token;
-import com.zerobase.user.domain.model.Customer;
-import com.zerobase.user.exception.CustomException;
 import com.zerobase.user.service.customer.CustomerBalanceService;
 import com.zerobase.user.service.customer.CustomerService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import static com.zerobase.user.exception.ErrorCode.NOT_FOUND_USER;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/customer")
@@ -23,23 +25,26 @@ public class CustomerController {
     private final JwtAuthenticationProvider provider;
     private final CustomerService customerService;
     private final CustomerBalanceService customerBalanceService;
-    
+
     @GetMapping("/getInfo")
     public ResponseEntity<CustomerDto> getInfo(
-            @RequestHeader(name = Token.AUTHORIZATION) String token
+        @RequestHeader(name = Token.AUTHORIZATION) String token
     ) {
-        UserVo userVo = provider.getUserVo(token.substring(Token.PREFIX.length()));
-        Customer customer = customerService.findByIdAndEmail(userVo.getId(), userVo.getEmail())
-                .orElseThrow(() -> new CustomException(NOT_FOUND_USER));
-        return ResponseEntity.ok(CustomerDto.from(customer));
+        UserVo userVo = provider.getUserVo(
+            token.substring(Token.PREFIX.length()));
+        return ResponseEntity.ok(
+            customerService.findByIdAndEmail(userVo.getId(), userVo.getEmail())
+        );
     }
 
     @PostMapping("/balance")
     public ResponseEntity<Long> changeBalance(
-            @RequestHeader(name = Token.AUTHORIZATION) String token,
-            @RequestBody ChangeBalanceForm form
-    ){
+        @RequestHeader(name = Token.AUTHORIZATION) String token,
+        @RequestBody @Valid ChangeBalanceForm form
+    ) {
         UserVo vo = provider.getUserVo(token.substring(Token.PREFIX.length()));
-        return ResponseEntity.ok(customerBalanceService.changeBalance(vo.getId(), form).getCurrentMoney());
+        return ResponseEntity.ok(
+            customerBalanceService.changeBalance(vo.getId(), form)
+                .getCurrentMoney());
     }
 }

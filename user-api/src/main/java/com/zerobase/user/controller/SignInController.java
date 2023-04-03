@@ -2,6 +2,7 @@ package com.zerobase.user.controller;
 
 import com.zerobase.user.application.SignInApplication;
 import com.zerobase.user.domain.SignInForm;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,14 +19,14 @@ public class SignInController {
 
     @PostMapping("/customer")
     public ResponseEntity<String> signInCustomer(
-            @RequestBody SignInForm form
+        @RequestBody @Valid SignInForm form
     ) {
         return ResponseEntity.ok(signInApplication.customerLoginToken(form));
     }
 
     @PostMapping("/seller")
     public ResponseEntity<String> signInSeller(
-            @RequestBody SignInForm form
+        @RequestBody @Valid SignInForm form
     ) {
         return ResponseEntity.ok(signInApplication.sellerLoginToken(form));
     }

@@ -12,7 +12,6 @@ public class FeignConfig {
     @Value(value = "${mailgun.key}")
     private String apiKey;
 
-
     @Qualifier(value = "mailgun")
     @Bean
     public BasicAuthRequestInterceptor basicAuthRequestInterceptor() {

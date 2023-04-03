@@ -28,12 +28,13 @@ public class CustomerFilter implements Filter {
 
         String token = req.getHeader(Token.AUTHORIZATION)
             .substring(Token.PREFIX.length());
+
         if (!jwtAuthenticationProvider.validateToken(token)) {
             throw new ServletException("Invalid Access");
         }
+
         UserVo vo = jwtAuthenticationProvider.getUserVo(token);
-        customerService.findByIdAndEmail(vo.getId(), vo.getEmail())
-            .orElseThrow(() -> new ServletException("Invalid access"));
+        customerService.findByIdAndEmail(vo.getId(), vo.getEmail());
         chain.doFilter(request, response);
     }
 }
