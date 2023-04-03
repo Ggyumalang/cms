@@ -3,7 +3,9 @@ package com.zerobase.cms.order.application;
 import static com.zerobase.cms.order.exception.ErrorCode.ORDER_FAIL_CHECK_CART;
 import static com.zerobase.cms.order.exception.ErrorCode.ORDER_FAIL_NO_MONEY;
 
+import com.zerobase.cms.order.client.MailgunClient;
 import com.zerobase.cms.order.client.UserClient;
+import com.zerobase.cms.order.client.mailgun.SendMailForm;
 import com.zerobase.cms.order.client.user.ChangeBalanceForm;
 import com.zerobase.cms.order.client.user.CustomerDto;
 import com.zerobase.cms.order.domain.model.ProductItem;
@@ -24,10 +26,10 @@ public class OrderApplication {
     private final UserClient userClient;
     private final ProductItemService productItemService;
 
+    private final MailgunClient mailgunClient;
+
     /**
-     * 1번 : 물건들이 전부 주문 가능한 상태인 지 확인
-     * 2번 : 가격 변동이 있었는 지에 대해 확인
-     * 3번 : 고객의 돈이 충분한 지
+     * 1번 : 물건들이 전부 주문 가능한 상태인 지 확인 2번 : 가격 변동이 있었는 지에 대해 확인 3번 : 고객의 돈이 충분한 지
      * 4번 : 결제 & 상품의 재고 관리
      *
      * @param token
@@ -69,7 +71,17 @@ public class OrderApplication {
                     productItem.getCount() - cartItem.getCount());
             }
         }
+        //주문 후 주문내역 이메일 송부
+        SendMailForm sendMailForm = SendMailForm.builder()
+            .from("admin@cmsorder.com")
+            .to(customerDto.getEmail())
+            .subject("Order Complete Email!")
+            .text(setOrderCompleteForm(customerDto.getName(),
+                orderCart.orderHistoryToString()))
+            .build();
 
+        mailgunClient.sendEmail(sendMailForm);
+        //주문 후 장바구니 비우기
         cartApplication.clearCart(cart.getCustomerId());
 
         return orderCart;
@@ -86,6 +98,15 @@ public class OrderApplication {
                     )
                 )
             ).sum();
+    }
+
+    private String setOrderCompleteForm(String name, String orderList) {
+        StringBuilder builder = new StringBuilder();
+        return builder.append("Hello ").append(name)
+            .append("! Thank you for using our service\n")
+            .append("Please Confirm your complete orderList as belows.\n\n")
+            .append(orderList)
+            .toString();
     }
 
 }
