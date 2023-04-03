@@ -1,6 +1,6 @@
 package com.zerobase.cms.order.domain.redis;
 
-import com.zerobase.cms.order.domain.product.AddProductCartForm;
+import com.zerobase.cms.order.domain.product.CartProductForm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +33,16 @@ public class Cart {
         messages.add(message);
     }
 
+    public Cart of(Long customerId, List<CartProductForm> form) {
+        return Cart.builder()
+            .customerId(customerId)
+            .products(form.stream()
+                .map(Product::from)
+                .collect(Collectors.toList()))
+            .messages(new ArrayList<>())
+            .build();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
@@ -46,7 +56,7 @@ public class Cart {
         @Builder.Default
         private List<ProductItem> items = new ArrayList<>();
 
-        public static Product from(AddProductCartForm form) {
+        public static Product from(CartProductForm form) {
             return Product.builder()
                 .id(form.getProductId())
                 .sellerId(form.getSellerId())
@@ -71,7 +81,7 @@ public class Cart {
         private Long price;
 
         public static ProductItem from(
-            AddProductCartForm.ProductItem productItem) {
+            CartProductForm.ProductItem productItem) {
             return ProductItem.builder()
                 .id(productItem.getProductItemId())
                 .name(productItem.getName())

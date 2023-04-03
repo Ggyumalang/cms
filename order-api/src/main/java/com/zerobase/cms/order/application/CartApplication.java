@@ -5,7 +5,8 @@ import static com.zerobase.cms.order.exception.ErrorCode.NOT_FOUND_PRODUCT;
 
 import com.zerobase.cms.order.domain.model.Product;
 import com.zerobase.cms.order.domain.model.ProductItem;
-import com.zerobase.cms.order.domain.product.AddProductCartForm;
+import com.zerobase.cms.order.domain.product.CartProductForm;
+import com.zerobase.cms.order.domain.product.UpdateProductCartForm;
 import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.cms.order.exception.CustomException;
 import com.zerobase.cms.order.service.CartService;
@@ -27,7 +28,7 @@ public class CartApplication {
 
     private final CartService cartService;
 
-    public Cart addCart(Long customerId, AddProductCartForm form) {
+    public Cart addCart(Long customerId, CartProductForm form) {
         Product product = productSearchService.getByProductId(
             form.getProductId());
         if (Objects.isNull(product)) {
@@ -44,8 +45,9 @@ public class CartApplication {
         return getCart(customerId);
     }
 
-    public Cart updateCart(Long customerId, Cart cart) {
-        cartService.putCart(customerId, cart);
+    public Cart updateCart(Long customerId, UpdateProductCartForm form) {
+        cartService.putCart(customerId,
+            new Cart().of(customerId, form.getProducts()));
         return getCart(customerId);
     }
 
@@ -185,7 +187,7 @@ public class CartApplication {
      * @return
      */
     private boolean addAble(Cart cart, Product product,
-        AddProductCartForm form) {
+        CartProductForm form) {
 
         Cart.Product cartProduct = cart.getProducts().stream()
             .filter(p -> p.getId().equals(form.getProductId()))

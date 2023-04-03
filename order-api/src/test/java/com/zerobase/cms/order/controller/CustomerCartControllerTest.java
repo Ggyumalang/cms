@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.cms.order.application.CartApplication;
 import com.zerobase.cms.order.application.OrderApplication;
-import com.zerobase.cms.order.domain.product.AddProductCartForm;
-import com.zerobase.cms.order.domain.product.AddProductCartForm.ProductItem;
+import com.zerobase.cms.order.domain.product.CartProductForm;
+import com.zerobase.cms.order.domain.product.CartProductForm.ProductItem;
 import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.domain.config.JwtAuthenticationProvider;
 import com.zerobase.domain.domain.common.UserVo;
@@ -65,7 +65,7 @@ class CustomerCartControllerTest {
         mockMvc.perform(post("/customer/cart")
                 .headers(headers)
                 .content(objectMapper.writeValueAsString(
-                    AddProductCartForm.builder()
+                    CartProductForm.builder()
                         .name("name")
                         .description("descripton")
                         .items(List.of(
