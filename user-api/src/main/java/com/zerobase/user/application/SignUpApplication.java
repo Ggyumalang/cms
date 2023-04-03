@@ -1,14 +1,14 @@
 package com.zerobase.user.application;
 
 import com.zerobase.user.client.MailgunClient;
+import com.zerobase.user.client.mailgun.SendMailForm;
+import com.zerobase.user.domain.SignUpForm;
+import com.zerobase.user.domain.model.Customer;
 import com.zerobase.user.domain.model.Seller;
 import com.zerobase.user.exception.CustomException;
 import com.zerobase.user.exception.ErrorCode;
 import com.zerobase.user.service.customer.SignUpCustomerService;
 import com.zerobase.user.service.seller.SignUpSellerService;
-import com.zerobase.user.client.mailgun.SendMailForm;
-import com.zerobase.user.domain.SignUpForm;
-import com.zerobase.user.domain.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SignUpApplication {
+
     private final MailgunClient mailgunClient;
     private final SignUpCustomerService signUpCustomerService;
     private final SignUpSellerService signUpSellerService;
+
+    private static final String SELLER = "seller";
+    private static final String CUSTOMER = "customer";
 
     public void customerVerify(String email, String code) {
         signUpCustomerService.verifyEmail(email, code);
@@ -31,15 +35,11 @@ public class SignUpApplication {
             Customer customer = signUpCustomerService.signUp(form);
             String code = getRandomCode();
 
-            SendMailForm sendMailForm = SendMailForm.builder()
-                    .from("tester@malangtester.com")
-                    .to(form.getEmail())
-                    .subject("Verification Email!")
-                    .text(getVerificationEmailBody(form.getEmail(), form.getName(), "customer", code))
-                    .build();
+            SendMailForm sendMailForm = getSendMailForm(form, CUSTOMER, code);
 
             mailgunClient.sendEmail(sendMailForm);
-            signUpCustomerService.changeCustomerValidateEmail(customer.getId(), code);
+            signUpCustomerService.changeCustomerValidateEmail(customer.getId(),
+                code);
             return "회원 가입에 성공하였습니다.";
         }
     }
@@ -51,12 +51,7 @@ public class SignUpApplication {
             Seller seller = signUpSellerService.signUp(form);
             String code = getRandomCode();
 
-            SendMailForm sendMailForm = SendMailForm.builder()
-                    .from("tester@malangtester.com")
-                    .to(form.getEmail())
-                    .subject("Verification Email!")
-                    .text(getVerificationEmailBody(form.getEmail(), form.getName(), "seller", code))
-                    .build();
+            SendMailForm sendMailForm = getSendMailForm(form, SELLER, code);
 
             mailgunClient.sendEmail(sendMailForm);
             signUpSellerService.changeSellerValidateEmail(seller.getId(), code);
@@ -68,19 +63,36 @@ public class SignUpApplication {
         signUpSellerService.verifyEmail(email, code);
     }
 
+    private SendMailForm getSendMailForm(
+        SignUpForm form, String type, String code
+    ) {
+        return SendMailForm.builder()
+            .from("tester@malangtester.com")
+            .to(form.getEmail())
+            .subject("Verification Email!")
+            .text(getVerificationEmailBody(
+                form.getEmail()
+                , form.getName()
+                , type
+                , code))
+            .build();
+    }
+
     private String getRandomCode() {
         return RandomStringUtils.random(10, true, true);
     }
 
-    private String getVerificationEmailBody(String email, String name, String type, String code) {
+    private String getVerificationEmailBody(String email, String name,
+        String type, String code) {
         StringBuilder builder = new StringBuilder();
-        return builder.append("Hello ").append(name).append("! Please Click Link for verifiaction.\n\n")
-                .append("http://localhost:8081/signup/")
-                .append(type)
-                .append("/verify/?email=")
-                .append(email)
-                .append("&code=")
-                .append(code)
-                .toString();
+        return builder.append("Hello ").append(name)
+            .append("! Please Click Link for verifiaction.\n\n")
+            .append("http://localhost:8081/signup/")
+            .append(type)
+            .append("/verify/?email=")
+            .append(email)
+            .append("&code=")
+            .append(code)
+            .toString();
     }
 }

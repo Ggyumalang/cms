@@ -6,6 +6,7 @@ import com.zerobase.cms.order.domain.jwt.Token;
 import com.zerobase.cms.order.domain.product.AddProductCartForm;
 import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.domain.config.JwtAuthenticationProvider;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class CustomerCartController {
     @PostMapping
     public ResponseEntity<Cart> addCart(
         @RequestHeader(name = Token.AUTHORIZATION) String token,
-        @RequestBody AddProductCartForm form
+        @RequestBody @Valid AddProductCartForm form
     ) {
         return ResponseEntity.ok(cartApplication.addCart(
             provider.getUserVo(token.substring(Token.PREFIX.length())).getId()

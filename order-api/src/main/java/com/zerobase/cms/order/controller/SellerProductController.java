@@ -5,6 +5,7 @@ import com.zerobase.cms.order.domain.product.*;
 import com.zerobase.cms.order.service.ProductItemService;
 import com.zerobase.cms.order.service.ProductService;
 import com.zerobase.domain.config.JwtAuthenticationProvider;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class SellerProductController {
     @PostMapping
     public ResponseEntity<ProductDto> addProduct(
             @RequestHeader(name = Token.AUTHORIZATION) String token,
-            @RequestBody AddProductForm form
+            @RequestBody @Valid AddProductForm form
     ) {
         return ResponseEntity.ok(ProductDto.from(
                 productService.addProduct(
@@ -33,7 +34,7 @@ public class SellerProductController {
     @PostMapping("/item")
     public ResponseEntity<ProductDto> addProductItem(
             @RequestHeader(name = Token.AUTHORIZATION) String token,
-            @RequestBody AddProductItemForm form
+            @RequestBody @Valid AddProductItemForm form
     ) {
         return ResponseEntity.ok(ProductDto.from(
                 productItemService.addProductItem(
@@ -45,7 +46,7 @@ public class SellerProductController {
     @PutMapping
     public ResponseEntity<ProductDto> updateProduct(
             @RequestHeader(name = Token.AUTHORIZATION) String token,
-            @RequestBody UpdateProductForm form
+            @RequestBody @Valid UpdateProductForm form
     ) {
         return ResponseEntity.ok(ProductDto.from(
                 productService.updateProduct(
@@ -57,7 +58,7 @@ public class SellerProductController {
     @PutMapping("/item")
     public ResponseEntity<ProductItemDto> updateProductItem(
             @RequestHeader(name = Token.AUTHORIZATION) String token,
-            @RequestBody UpdateProductItemForm form
+            @RequestBody @Valid UpdateProductItemForm form
     ) {
         return ResponseEntity.ok(ProductItemDto.from(
                 productItemService.updateProductItem(

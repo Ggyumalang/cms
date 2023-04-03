@@ -1,13 +1,20 @@
 package com.zerobase.user.domain.model;
 
 import com.zerobase.user.domain.SignUpForm;
-import lombok.*;
-import org.hibernate.envers.AuditOverride;
-
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.envers.AuditOverride;
 
 @Getter
 @Setter
@@ -16,9 +23,10 @@ import java.util.Locale;
 @Builder
 @Entity
 @AuditOverride(forClass = BaseEntity.class)
-public class Customer extends BaseEntity{
+public class Customer extends BaseEntity {
+
     @Id
-    @Column(name = "id" , nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -35,14 +43,15 @@ public class Customer extends BaseEntity{
     private boolean verify;
 
     private Long balance;
+
     public static Customer from(SignUpForm form) {
         return Customer.builder()
-                .email(form.getEmail().toLowerCase(Locale.ROOT))
-                .password(form.getPassword())
-                .name(form.getName())
-                .birth(form.getBirth())
-                .phone(form.getPhone())
-                .verify(false)
-                .build();
+            .email(form.getEmail().toLowerCase(Locale.ROOT))
+            .password(form.getPassword())
+            .name(form.getName())
+            .birth(form.getBirth())
+            .phone(form.getPhone())
+            .verify(false)
+            .build();
     }
 }

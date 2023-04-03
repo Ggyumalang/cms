@@ -13,20 +13,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.zerobase.user"))
-                .paths(PathSelectors.any())
-                .build().apiInfo(apiInfo());
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.zerobase.user"))
+            .paths(PathSelectors.any())
+            .build().apiInfo(apiInfo());
     }
 
-    private ApiInfo apiInfo(){
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("이커머스 프로젝트 :)")
-                .description("이커머스 프로젝트입니다.")
-                .version("1.0")
-                .build();
+            .title("이커머스 프로젝트 :)")
+            .description("이커머스 프로젝트입니다.")
+            .version("1.0")
+            .build();
     }
 }

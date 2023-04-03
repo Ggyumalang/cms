@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 public class DeployTestController {
-    public String hello(){
+
+    public String hello() {
         return "hello User Api";
     }
 }
