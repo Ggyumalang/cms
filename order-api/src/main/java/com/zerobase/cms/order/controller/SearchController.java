@@ -19,12 +19,12 @@ public class SearchController {
     private final ProductSearchService productSearchService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> searchByName(
+    public ResponseEntity<List<ProductDto.Response>> searchByName(
             @RequestParam String name
     ) {
         return ResponseEntity.ok(
                 productSearchService.searchByName(name).stream()
-                        .map(ProductDto::withoutItemsFrom)
+                        .map(ProductDto.Response::from)
                         .collect(Collectors.toList())
         );
     }

@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.zerobase.cms.order.client.UserClient;
 import com.zerobase.cms.order.domain.model.Product;
-import com.zerobase.cms.order.domain.product.AddProductCartForm;
 import com.zerobase.cms.order.domain.product.AddProductForm;
 import com.zerobase.cms.order.domain.product.AddProductItemForm;
+import com.zerobase.cms.order.domain.product.CartProductForm;
 import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.cms.order.domain.repository.ProductRepository;
 import com.zerobase.cms.order.service.ProductService;
@@ -18,9 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class CartApplicationTest {
-
-//    @AutoConfigureBefore
-//    private JpaAuditingConfiguration jpaAuditingConfiguration;
 
     @Autowired
     private CartApplication cartApplication;
@@ -67,14 +64,14 @@ class CartApplicationTest {
 
     }
 
-    AddProductCartForm makeAddForm(Product p) {
-        AddProductCartForm.ProductItem productItem = AddProductCartForm.ProductItem.builder()
+    CartProductForm makeAddForm(Product p) {
+        CartProductForm.ProductItem productItem = CartProductForm.ProductItem.builder()
             .productItemId(p.getProductItems().get(0).getId())
             .name(p.getProductItems().get(0).getName())
             .count(11L)
             .price(10000L)
             .build();
-        return AddProductCartForm.builder()
+        return CartProductForm.builder()
             .productId(p.getId())
             .sellerId(p.getSellerId())
             .name(p.getName())

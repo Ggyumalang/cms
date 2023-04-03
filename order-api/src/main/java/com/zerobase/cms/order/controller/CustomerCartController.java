@@ -3,7 +3,8 @@ package com.zerobase.cms.order.controller;
 import com.zerobase.cms.order.application.CartApplication;
 import com.zerobase.cms.order.application.OrderApplication;
 import com.zerobase.cms.order.domain.jwt.Token;
-import com.zerobase.cms.order.domain.product.AddProductCartForm;
+import com.zerobase.cms.order.domain.product.CartProductForm;
+import com.zerobase.cms.order.domain.product.UpdateProductCartForm;
 import com.zerobase.cms.order.domain.redis.Cart;
 import com.zerobase.domain.config.JwtAuthenticationProvider;
 import javax.validation.Valid;
@@ -29,7 +30,7 @@ public class CustomerCartController {
     @PostMapping
     public ResponseEntity<Cart> addCart(
         @RequestHeader(name = Token.AUTHORIZATION) String token,
-        @RequestBody @Valid AddProductCartForm form
+        @RequestBody @Valid CartProductForm form
     ) {
         return ResponseEntity.ok(cartApplication.addCart(
             provider.getUserVo(token.substring(Token.PREFIX.length())).getId()
@@ -48,10 +49,10 @@ public class CustomerCartController {
     @PutMapping
     public ResponseEntity<Cart> updateCart(
         @RequestHeader(name = Token.AUTHORIZATION) String token
-        , @RequestBody Cart cart
+        , @RequestBody @Valid UpdateProductCartForm form
     ) {
         return ResponseEntity.ok(cartApplication.updateCart(provider.getUserVo(
-            token.substring(Token.PREFIX.length())).getId(), cart));
+            token.substring(Token.PREFIX.length())).getId(), form));
     }
 
     @PostMapping("/order")
