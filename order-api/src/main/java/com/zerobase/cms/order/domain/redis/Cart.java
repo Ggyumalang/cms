@@ -24,6 +24,7 @@ public class Cart {
     private List<Product> products = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
 
+
     public Cart(Long customerId) {
         this.customerId = customerId;
     }
@@ -82,5 +83,32 @@ public class Cart {
 
     public Cart clone() {
         return new Cart(customerId, products, messages);
+    }
+
+
+    public String orderHistoryToString() {
+        StringBuilder sb = new StringBuilder();
+        for (Cart.Product cartProduct : this.products) {
+
+            sb.append("ProductName : ")
+                .append(cartProduct.getName())
+                .append("\n")
+                .append("Description : ")
+                .append(cartProduct.getDescription())
+                .append("\n\t");
+
+            for (Cart.ProductItem items : cartProduct.getItems()) {
+                sb.append("itemName : ")
+                    .append(items.getName())
+                    .append("\n\t")
+                    .append("Price : ")
+                    .append(items.getPrice())
+                    .append("\n\t")
+                    .append("Count : ")
+                    .append(items.getCount())
+                    .append("\n\t");
+            }
+        }
+        return sb.toString();
     }
 }

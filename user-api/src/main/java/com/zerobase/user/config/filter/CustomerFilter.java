@@ -2,35 +2,38 @@ package com.zerobase.user.config.filter;
 
 import com.zerobase.domain.config.JwtAuthenticationProvider;
 import com.zerobase.domain.domain.common.UserVo;
+import com.zerobase.user.domain.jwt.Token;
 import com.zerobase.user.service.customer.CustomerService;
-import lombok.RequiredArgsConstructor;
-
-import javax.servlet.*;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 
 @WebFilter(urlPatterns = "/customer/*")
 @RequiredArgsConstructor
 public class CustomerFilter implements Filter {
+
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final CustomerService customerService;
 
-    private final String AUTHORIZATION = "Authorization";
-    private final String TOKEN_PREFIX = "Bearer ";
-
-
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response,
+        FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
 
-        String token = req.getHeader(AUTHORIZATION).substring(TOKEN_PREFIX.length());
-        if(!jwtAuthenticationProvider.validateToken(token)){
+        String token = req.getHeader(Token.AUTHORIZATION)
+            .substring(Token.PREFIX.length());
+        if (!jwtAuthenticationProvider.validateToken(token)) {
             throw new ServletException("Invalid Access");
         }
         UserVo vo = jwtAuthenticationProvider.getUserVo(token);
         customerService.findByIdAndEmail(vo.getId(), vo.getEmail())
-                .orElseThrow(() -> new ServletException("Invalid access"));
+            .orElseThrow(() -> new ServletException("Invalid access"));
         chain.doFilter(request, response);
     }
 }

@@ -12,9 +12,12 @@ public class CustomerDto {
 
     private Long id;
     private String email;
+    private String name;
     private Long balance;
 
-    public static CustomerDto from(Customer customer){
-       return new CustomerDto(customer.getId(), customer.getEmail(), customer.getBalance() == null ? 0 : customer.getBalance());
+    public static CustomerDto from(Customer customer) {
+        return new CustomerDto(customer.getId(), customer.getEmail(),
+            customer.getName(),
+            customer.getBalance() == null ? 0 : customer.getBalance());
     }
 }
